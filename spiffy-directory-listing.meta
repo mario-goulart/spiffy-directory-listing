@@ -2,7 +2,7 @@
 
 ((egg "spiffy-directory-listing.egg")
  (synopsis "Flexible directory listing for Spiffy")
- (author "<a href=\"http://chicken.wiki.br/users/mario-domenech-goulart\">Mario Domenech Goulart</a>")
+ (author "<a href=\"http://wiki.call-cc.org/users/mario-domenech-goulart\">Mario Domenech Goulart</a>")
  (license "BSD")
  (category web)
  (depends spiffy html-utils)
