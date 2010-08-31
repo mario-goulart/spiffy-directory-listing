@@ -5,6 +5,5 @@
  (author "<a href=\"http://wiki.call-cc.org/users/mario-domenech-goulart\">Mario Domenech Goulart</a>")
  (license "BSD")
  (category web)
- (depends spiffy html-utils)
- (files "spiffy-directory-listing.scm" "spiffy-directory-listing.setup" "spiffy-directory-listing.html"))
+ (depends spiffy html-utils))
 
