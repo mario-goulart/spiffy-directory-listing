@@ -6,5 +6,5 @@
  (license "BSD")
  (category web)
  (depends spiffy html-utils)
- (files "spiffy-directory-listing.scm" "spiffy-directory-listing.setup" "spiffy-directory-listing.html"))
+ (files "spiffy-directory-listing.scm" "spiffy-directory-listing.meta" "test/list-dir.scm" "spiffy-directory-listing.setup"))
 
