@@ -2,9 +2,7 @@
 
 ((egg "spiffy-directory-listing.egg")
  (synopsis "Flexible directory listing for Spiffy")
- (author "<a href=\"http://wiki.call-cc.org/users/mario-domenech-goulart\">Mario Domenech Goulart</a>")
+ (author "Mario Domenech Goulart")
  (license "BSD")
  (category web)
- (depends spiffy html-utils)
- (files "spiffy-directory-listing.scm" "spiffy-directory-listing.meta" "test/list-dir.scm" "spiffy-directory-listing.release-info" "spiffy-directory-listing.setup"))
-
+ (depends spiffy html-utils))
