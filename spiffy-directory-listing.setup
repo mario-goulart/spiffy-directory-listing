@@ -3,6 +3,8 @@
 (compile -s -O3 -d1 -j spiffy-directory-listing spiffy-directory-listing.scm)
 (compile -s -O3 -d1 spiffy-directory-listing.import.scm)
 
-(install-extension 'spiffy-directory-listing
-                   '("spiffy-directory-listing.so" "spiffy-directory-listing.import.so")
-                   '((version 0.1)))
+(install-extension
+ 'spiffy-directory-listing
+ '("spiffy-directory-listing.so"
+   "spiffy-directory-listing.import.so")
+ '((version "0.2")))
