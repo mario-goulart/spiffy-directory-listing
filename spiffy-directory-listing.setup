@@ -7,4 +7,4 @@
  'spiffy-directory-listing
  '("spiffy-directory-listing.so"
    "spiffy-directory-listing.import.so")
- '((version "0.2")))
+ '((version "0.3")))
