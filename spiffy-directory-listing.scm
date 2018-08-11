@@ -8,10 +8,12 @@
    directory-listing-css
    directory-listing-doctype
    directory-listing-title
-   list-directory)
+   list-directory
+   sxml->html)
 
-(import chicken scheme srfi-1 extras spiffy files posix data-structures ports)
-(require-extension intarweb html-tags html-utils spiffy)
+(import chicken scheme)
+(use data-structures extras files ports posix srfi-1 sxml-transforms)
+(use intarweb spiffy)
 
 (define list-dotfiles? (make-parameter #f))
 
@@ -21,6 +23,23 @@
      (sort (directory (make-pathname (root-path) path)
                       (list-dotfiles?))
            string<?))))
+
+(define sxml->html
+  (make-parameter
+   (let ((rules `((literal *preorder* . ,(lambda (t b) b))
+                  . ,universal-conversion-rules*)))
+     (lambda (sxml)
+       (with-output-to-string
+         (lambda ()
+           (SRV:send-reply (pre-post-order* sxml rules))))))))
+
+(define (tabularize data)
+  (let ((body
+         (map (lambda (line)
+                (cons 'tr
+                      (list (map (lambda (cell) `(td ,cell)) line))))
+              data)))
+    (cons 'table (list body))))
 
 (define format-listing
   (make-parameter
@@ -37,9 +56,10 @@
                        (if dir?
                            (string-append path "/")
                            path))))
-               (list (<a> href: remote-file (maybe-append-slash remote-file))
-                     (file-size local-file)
-                     (seconds->string (file-modification-time local-file)))))
+               `((a (@ (href ,remote-file))
+                    ,(maybe-append-slash remote-file))
+                 ,(file-size local-file)
+                 ,(seconds->string (file-modification-time local-file)))))
            listing)))))
 
 (define directory-listing-css (make-parameter #f))
@@ -54,19 +74,25 @@
 (define directory-listing-page
   (make-parameter
    (lambda (path contents)
-     (html-page
-      (string-append
-       (<h2> "Index of " (<code> path) ":")
-       (<p> (<a> href: (or (pathname-directory path) path)
-                 "Go to parent directory"))
-       contents)
-      css: (directory-listing-css)
-      doctype: (directory-listing-doctype)
-      title: ((directory-listing-title) path)))))
+     `(,(directory-listing-doctype)
+       (html
+        (head
+         (meta (@ (charset "utf-8")))
+         (title ,((directory-listing-title) path))
+         ,(if (directory-listing-css)
+              `(link (@ (rel "stylesheet")
+                        (href ,(directory-listing-css))
+                        (type "text/css")))
+              '()))
+        (body
+         (h2 "Index of " (code ,path) ":")
+         (p (a (@ (href ,(or (pathname-directory path) path)))
+               "Go to parent directory"))
+         ,contents))))))
 
 (define (spiffy-directory-listing path)
   (let* ((file-listing ((format-listing) path ((list-directory) path)))
-         (page ((directory-listing-page) path file-listing)))
+         (page ((sxml->html) ((directory-listing-page) path file-listing))))
     (with-headers `((content-type text/html)
                     (content-length ,(string-length page)))
       (lambda ()

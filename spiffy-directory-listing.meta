@@ -5,4 +5,4 @@
  (author "Mario Domenech Goulart")
  (license "BSD")
  (category web)
- (depends spiffy html-utils))
+ (depends spiffy sxml-transforms))

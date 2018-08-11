@@ -2,7 +2,7 @@
 
 ;; access http://localhost:8080/dir
 
-(use awful html-utils html-tags spiffy spiffy-directory-listing)
+(use awful spiffy spiffy-directory-listing)
 
 (unless (file-exists? "dir")
   (create-directory "dir")
@@ -12,4 +12,21 @@
 
 (directory-listing-css "http://wiki.call-cc.org/chicken.css")
 (directory-listing-title (lambda (path) (string-append "Listing " path)))
+
+(directory-listing-page
+ (lambda (path contents)
+   `(,(directory-listing-doctype)
+     (html
+      (head
+       (title ,((directory-listing-title) path))
+       (link (@ (rel "stylesheet")
+                (href ,(directory-listing-css))
+                (type "text/css"))))
+      (body
+       (div (@ (id "content"))
+            (h2 "Index of " (code ,path) ":")
+            (p (a (@ (href ,(or (pathname-directory path) path)))
+                  "Go to parent directory"))
+            ,contents))))))
+
 (handle-directory spiffy-directory-listing)
