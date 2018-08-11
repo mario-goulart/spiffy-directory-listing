@@ -1,8 +1,6 @@
-#!/usr/bin/awful
-
 ;; access http://localhost:8080/dir
 
-(use awful spiffy spiffy-directory-listing)
+(use spiffy spiffy-directory-listing)
 
 (unless (file-exists? "dir")
   (create-directory "dir")
@@ -30,3 +28,6 @@
             ,contents))))))
 
 (handle-directory spiffy-directory-listing)
+
+(root-path ".")
+(start-server)
