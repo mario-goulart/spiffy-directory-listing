@@ -1,3 +1,7 @@
 spiffy-directory-listing.import.scm
 spiffy-directory-listing.import.so
 spiffy-directory-listing.so
+spiffy-directory-listing.build.sh
+spiffy-directory-listing.install.sh
+spiffy-directory-listing.link
+spiffy-directory-listing.static.o

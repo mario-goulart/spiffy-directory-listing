@@ -11,9 +11,22 @@
    list-directory
    sxml->html)
 
-(import chicken scheme)
-(use data-structures extras files ports posix srfi-1 sxml-transforms)
-(use intarweb spiffy)
+(import scheme)
+(cond-expand
+  (chicken-4
+   (import chicken)
+   (use data-structures extras files ports posix srfi-1 sxml-transforms)
+   (use intarweb spiffy))
+  (chicken-5
+   (import (chicken base)
+           (chicken file)
+           (chicken file posix)
+           (chicken pathname)
+           (chicken port)
+           (chicken sort)
+           (chicken time posix))
+   (import intarweb spiffy sxml-transforms))
+  (else (error "Unsupported CHICKEN version")))
 
 (define list-dotfiles? (make-parameter #f))
 

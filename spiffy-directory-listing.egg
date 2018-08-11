@@ -1,0 +1,11 @@
+;;; spiffy-directory-listing.egg -*- scheme -*-
+
+((synopsis "Flexible directory listing for Spiffy")
+ (author "Mario Domenech Goulart")
+ (license "BSD")
+ (category web)
+ (build-dependencies spiffy sxml-transforms)
+ (component-options
+  (csc-options "-O3" "-d1"))
+ (components
+  (extension spiffy-directory-listing)))

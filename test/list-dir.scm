@@ -1,6 +1,14 @@
 ;; access http://localhost:8080/dir
 
-(use spiffy spiffy-directory-listing)
+(import scheme)
+(cond-expand
+  (chicken-4
+   (use spiffy spiffy-directory-listing))
+  (chicken-5
+   (import (chicken file)
+           (chicken pathname))
+   (import spiffy spiffy-directory-listing))
+  (else (error "Unsupported CHICKEN version.")))
 
 (unless (file-exists? "dir")
   (create-directory "dir")
