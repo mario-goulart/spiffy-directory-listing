@@ -9,13 +9,16 @@
    directory-listing-doctype
    directory-listing-title
    list-directory
-   sxml->html)
+   sxml->html
+   encode-path)
 
 (import scheme)
 (cond-expand
   (chicken-4
    (import chicken)
    (use data-structures extras files ports posix srfi-1 sxml-transforms)
+   (use (only srfi-14 char-set-complement char-set-delete))
+   (use (only uri-common uri-encode-string char-set:uri-unreserved))
    (use intarweb spiffy))
   (chicken-5
    (import (chicken base)
@@ -25,6 +28,8 @@
            (chicken port)
            (chicken sort)
            (chicken time posix))
+   (import (only srfi-14 char-set-complement char-set-delete))
+   (import (only uri-common uri-encode-string char-set:uri-unreserved))
    (import intarweb spiffy sxml-transforms))
   (else (error "Unsupported CHICKEN version")))
 
@@ -69,7 +74,7 @@
                        (if dir?
                            (string-append path "/")
                            path))))
-               `((a (@ (href ,remote-file))
+               `((a (@ (href ,(encode-path remote-file)))
                     ,(maybe-append-slash remote-file))
                  ,(file-size local-file)
                  ,(seconds->string (file-modification-time local-file)))))
@@ -83,6 +88,10 @@
   (make-parameter
    (lambda (path)
      (string-append "Index of " path))))
+
+(define (encode-path p)
+  (let ((cs (char-set-delete (char-set-complement char-set:uri-unreserved) #\/)))
+    (uri-encode-string p cs)))
 
 (define directory-listing-page
   (make-parameter
@@ -99,7 +108,7 @@
               '()))
         (body
          (h2 "Index of " (code ,path) ":")
-         (p (a (@ (href ,(or (pathname-directory path) path)))
+         (p (a (@ (href ,(encode-path (or (pathname-directory path) path))))
                "Go to parent directory"))
          ,contents))))))
 

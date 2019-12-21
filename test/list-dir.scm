@@ -12,7 +12,8 @@
 
 (unless (file-exists? "dir")
   (create-directory "dir")
-  (create-directory (make-pathname "dir" "another-dir"))
+  (create-directory (make-pathname "dir" "another dir [] with () special chars"))
+  (create-directory (make-pathname "dir/another dir [] with () special chars" "subdir"))
   (with-output-to-file (make-pathname "dir" "1.txt") (cut display ""))
   (with-output-to-file (make-pathname "dir" "2.txt") (cut display "")))
 
@@ -31,7 +32,7 @@
       (body
        (div (@ (id "content"))
             (h2 "Index of " (code ,path) ":")
-            (p (a (@ (href ,(or (pathname-directory path) path)))
+            (p (a (@ (href ,(encode-path (or (pathname-directory path) path))))
                   "Go to parent directory"))
             ,contents))))))
 
